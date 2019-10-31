@@ -7,6 +7,13 @@
   	header('location: login.php');
   }
 ?>
+<?php if (!$_SESSION['verified']){
+
+
+header('location: verify.php');
+
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,17 +43,25 @@
 
 <br>
 
+
+<form action="results.php" method="get" autocomplete="off">
 <div class="wrap">
   <?php  if (isset($_SESSION['username'])) : ?>
       <p>Welcome <strong><?php echo $_SESSION['username']; ?> </strong></p>   
   <?php endif ?>
    <div class="search">
-      <input type="text" class="searchTerm" placeholder="What are you looking for?">
+      <input type="text" class="searchTerm"  name="q" placeholder="What are you looking for?">
       <button type="submit" class="searchButton"> Go
         <i class="fa fa-search"></i>
      </button>
    </div>
+   <a href="advance.php"><b>Advance_Search</b></a>
+   <br>
+   <br>
+   <a href="add.php">ADD</a>
+
 </div>
+</form>
 
 
 <div class="footer">
