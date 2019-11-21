@@ -3,6 +3,7 @@
 <html>
 <head>
   <title>Registration system PHP and MySQL</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -36,6 +37,7 @@
   	  <label>Confirm password</label>
   	  <input type="password" name="password_2">
   	</div>
+    <div class="g-recaptcha" data-sitekey="6LeiD8EUAAAAAALaiOjrvBCP1DhoEESHH1OoZcxF"></div>
   	<div class="input-group">
   	  <button type="submit" class="btn" name="reg_user">Register</button>
       <button type="" class="btn"><a href="index.php">Cancel</a></button>

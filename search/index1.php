@@ -7,7 +7,14 @@
   	header('location: login.php');
   }
 ?>
-<?php if (!$_SESSION['verified']){
+<?php 
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+    header('location: login.php');
+  }
+
+elseif (!$_SESSION['verified']){
 
 
 header('location: verify.php');
@@ -32,19 +39,18 @@ header('location: verify.php');
 
   
 <div class="topnav">
-  <a href="index1.php" class="active">Country</a>
-  <a href="#Venue">Venue</a>
-  <a href="#Series">Series</a>
-  <a href="profile.php" name="getprofile">Myprofile</a>
- 
+  <a href="index1.php">Home</a>
+  <a href="#City">City</a>
+  <a href="#Venue">Categories</a>
+  <a href="#Series">Name</a>
+  <a href="profile.php">Myprofile</a>
   
-
 </div>
 
 <br>
 
 
-<form action="results.php" method="get" autocomplete="off">
+<form action="display1.php" method="get" autocomplete="off">
 <div class="wrap">
   <?php  if (isset($_SESSION['username'])) : ?>
       <p>Welcome <strong><?php echo $_SESSION['username']; ?> </strong></p>   

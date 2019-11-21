@@ -1,6 +1,7 @@
 <?php
 
-  require_once 'app/init.php';
+  require_once "C:/Apache24/htdocs/se/app/init.php";
+
 
   if(isset($_GET['q']))
   {
@@ -46,7 +47,7 @@
         'index' => 'final',
         'type' => '_doc',
         'from' => 0,
-        'size' => 1000,
+        'size' => 20,
         'body' => [
           'query' =>[
                      'multi_match' => [ 'query' => $xq,
@@ -65,7 +66,7 @@
     }
   }
   $total=$query['hits']['total']['value'];
-  $v = intval(($total/10));
+  $v = intval(($total/20));
   if($v==0)
   {
     $noofpages = $v;
@@ -85,25 +86,14 @@
   <meta name="description" content="search-results">
   <meta name="author" content="Ruan Bekker">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
+  <link rel="stylesheet" href="../styles.css">
   <script type="text/javascript" src="hilitor.js"></script>
-  <script type="text/javascript" src="save.js"></script>
-  <script type="text/javascript" src="pagination.js"></script>
 
 
   
 
 </head>
 <script type="text/javascript">
-
   var myHilitor; // global variable
   window.addEventListener("DOMContentLoaded", function(e) {
     myHilitor = new Hilitor("content");
@@ -148,48 +138,28 @@
 <br>
 
 <br>
-
+<main id="content" class="" role="main">
  <div class="">
     <div class="" style="">
        <h1>Restaurant Search</h1>
     <h2> Results: </h2>
-    <!-- <?php echo $xq; echo nl2br("\r\n");?>
+    <?php echo $xq; echo nl2br("\r\n");?>
     <?php echo $total; echo nl2br("\r\n"); ?>
-    <?php echo $noofpages; ?> -->
+    <?php echo $noofpages; ?>
     </div>
   </div>
   
 
-<div class="container">
-    <div class="row" style="text-align: center">
-    <h2> Search Results: </h2>
-    </div>
-  </div>
-  <div class="page"></div>
-  
   
         <?php
         if(isset($results)) {
-         $max = sizeof($results);
-         $pagesize =10;
-         $pagecount = $max/$pagesize;
-         echo "Maximum : ",$max,"\r\n";
-         echo "Pagesize : ",$pagesize,"\r\n";
-         echo "PageCount : ",$pagecount,"\r\n";
-
-            foreach($results as $key=>$r) {
-
-             if($key<$pagesize)
-             {
-
-             
+            foreach($results as $r) {
             ?>
-            
-              
-                <div class="row" style="text-align: center">
-           <div class="container initial">
-          <div class="panel panel-success">
-                      <div class0=panel-heading>
+
+                <div class="" style="">
+   		             <div class="">
+  		                <div class="">
+                      <div class=panel-heading>
                         <h2 class=panel-title>
                           <a href="<?php echo $r['_source']['websites']; ?>" target="_blank"><p><br> 
                             <?php echo $r['_source']['name']; ?>
@@ -209,51 +179,21 @@
                                echo nl2br("\r\n");
                                echo  $r['_source']['categories'];
                                echo nl2br("\r\n");
-                               // echo  $r['_source']['websites'];
+                               echo  $r['_source']['websites'];
                               ?><p></p>
                       <div class="">
                           <b>DocId:</b>
                             
                                 <?php echo $r['_id']; ?>
-                    </div>
-                    <input method= "POST" id="<?php echo $r['_id']; ?>" type="submit" class="btn btn-success save" value="Save" style="
-    background-color: skyblue;">
-                     <br>
-
-               <br>
+                            
+                          
+                    </div> 
                   </div>
-                  
                 </div>
-               
-                
             <?php
-             }
-            } 
-            
-            ?>
-            </div>
-            <?php          
-            for($i=1;$i<$pagecount;$i++){
-            ?>
-
-               <a class="page-link searchresult" id="<?php echo $xq ?>" href="#" value=<?php echo $i?>><?php echo $i ?></a>
-            <?php       
             }
-          
-
-          
-            ?>
-  
-
-               
-          
-           
-               
-               
-           
-          
-            <?php
         }
         ?>
+      </main>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <?php
 require_once 'sendemail.php';
+$sitekey = "6LeiD8EUAAAAAALaiOjrvBCP1DhoEESHH1OoZcxF";
+$secretkey ="6LeiD8EUAAAAAO_S7sVp-x3UDCav8VBIJFd0sntU";
+$url = "https://www.google.com/recaptcha/api/siteverify";
 session_start();
 
 // initializing variables
@@ -40,13 +43,18 @@ if (isset($_POST['reg_user'])) {
     $token = bin2hex(random_bytes(50)); // generate unique token
     $password = password_hash($_POST['password_1'], PASSWORD_DEFAULT); //encrypt password
 
+    $response_key = $_POST['g-recaptcha-response'];
+    $response = file_get_contents($url.'?secret='.$secretkey.'&response='.$response_key.'&remoteip='.$_SERVER['REMOTE_ADDR']);
+    $response = json_decode($response);
+
     // Check if email already exists
     $sql = "SELECT * FROM users WHERE email='$email' LIMIT 1";  
     $result = mysqli_query($db, $sql);
     if (mysqli_num_rows($result) > 0) {
         $errors['email'] = "Email already exists";
     }
-
+  if($response->success == 1)
+    {  
     if (count($errors) === 0) {
         $query = "INSERT INTO users SET username=?, firstname=?,country=?,email=?, token=?, password=?";
         $stmt = $db->prepare($query);
@@ -74,11 +82,16 @@ if (isset($_POST['reg_user'])) {
             $_SESSION['error_msg'] = "Database error: Could not register user";
         }
     }
+  }
+  else
+    {
+        echo "hi robot";
+    }  
 }
 
 
 // REGISTER USER
-if (isset($_POST['reg1_user'])) {
+/*if (isset($_POST['reg1_user'])) {
   // receive all input values from the form
   $username = mysqli_real_escape_string($db, $_POST['username']);
   $fn = mysqli_real_escape_string($db, $_POST['fn']);
@@ -140,7 +153,7 @@ if (isset($_POST['reg1_user'])) {
             $_SESSION['error_msg'] = "Database error: Could not register user";
         }
     }
-}
+}*/
 
 if (isset($_POST['login_user'])) {
     if (empty($_POST['username'])) {
@@ -151,6 +164,12 @@ if (isset($_POST['login_user'])) {
     }
     $username = $_POST['username'];
     $password = $_POST['password'];
+
+    $response_key = $_POST['g-recaptcha-response'];
+    $response = file_get_contents($url.'?secret='.$secretkey.'&response='.$response_key.'&remoteip='.$_SERVER['REMOTE_ADDR']);
+    $response = json_decode($response);
+  if($response->success == 1)
+    {    
 
     if (count($errors) === 0) {
         $query = "SELECT * FROM users WHERE username=? OR email=? LIMIT 1";
@@ -179,6 +198,11 @@ if (isset($_POST['login_user'])) {
             $_SESSION['type'] = "alert-danger";
         }
     }
+  }
+  else{
+    echo "hi robot";
+
+  }  
 }
 
 if (isset($_POST['resetpass_user'])) {

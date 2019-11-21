@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="style.css">
 
-	<title>My Profile</title>
+	<title>SavedItems</title>
 	
 </head>
 
@@ -31,7 +31,7 @@
 	<br>
 
 	<div class="header">
-  	<h2>Myprofile</h2>
+  	<h2>MyItems</h2>
   	
   </div>
 	 
@@ -40,30 +40,31 @@
   	<div class="input-group">
   		
   	<?php  if (isset($_SESSION['username'])) : ?>
-      <p>Username: <strong><?php echo $_SESSION['username']; ?></strong></p>
+      <p>Username: <strong>Hello <?php echo $_SESSION['username']; ?> below are items you saved</strong></p>
     <?php endif ?>
   	</div>
   	
   	<?php
-  		$db = mysqli_connect('localhost', 'admin', 'monarchs', 'se');
-  		$query = "SELECT *from users WHERE username='" . $_SESSION["username"] . "'";
+    $solutions = array();
+  		$db = mysqli_connect('localhost', 'admin', 'monarchs', 'm2');
+  		$query = "SELECT * from saveitems WHERE user ='abhi1212'";
   		$result = mysqli_query( $db, $query );
   		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+//       while($r = mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+//   $solutions[] = $r['name'];
+// }
+
       
-  		echo nl2br ("Email :{$row['email']} \n "); 
-      echo nl2br("Firstname :{$row['firstname']} \n ");
-      echo "Country :{$row['country']} ";
+  		echo nl2br ("Name :{$row['name']} \n "); 
+      echo nl2br("Categories :{$row['categories']} \n ");
+      echo "Address :{$row['address']} ";
      
   	?>
 
   	
   	
-  	<div class="input-group">
-  		
-  	<a href="changepassword.php">ChangePassword</a>
-    <a href="updateinfo.php">UpdateInformartion</a>
-  	<a href="saveditems2.php">SavedItems</a>
-  	</div>
+  	
   	
   </form>
 

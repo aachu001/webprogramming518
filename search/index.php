@@ -42,17 +42,17 @@
 <body>
 
 <div class="topnav">
-
-  <a href="index.php">Country</a>
-  <a href="#Venue">Venue</a>
-  <a href="#Series">Series</a>
+  <a href="index.php">Home</a>
+  <a href="#City">City</a>
+  <a href="#Venue">Categories</a>
+  <a href="#Series">Name</a>
   <div class="search-container">
     <a href="register.php">SignUP</a>
     <a href="login.php">Login</a>
   </div>
   
 </div>
-<form action="results.php" method="get" autocomplete="off">
+<form action="display.php" method="get" autocomplete="on">
 <div class="wrap">
    <div class="search">
       <input type="text" class="searchTerm"  name="q" oninput='onclick()' placeholder="What are you looking for?">
@@ -69,7 +69,7 @@
    <a href="advance.php"><b>Advance_Search</b></a>
    <br>
    <br>
-   <a href="add.php">ADD</a>
+   <!-- <a href="add.php">ADD</a> -->
 
 </div>
 </form>

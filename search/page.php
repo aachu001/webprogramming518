@@ -93,7 +93,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
   <script type="text/javascript" src="hilitor.js"></script>
   <script type="text/javascript" src="save.js"></script>
   <script type="text/javascript" src="pagination.js"></script>
@@ -110,6 +110,16 @@
     myHilitor.apply("<?php echo $xq; ?>");
   }, false);
 
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var options={
+      valueNames:['name','category'],
+      page:10,
+      pagination: true
+    }
+    var listObj = new List('listId',options);
+  });
 </script>
 <body>
 <div class="topnav">
@@ -165,95 +175,24 @@
     <h2> Search Results: </h2>
     </div>
   </div>
-  <div class="page"></div>
+  <div id="listId">
+    <ul class="list">
+      
+      <?php
+      for ($i=0; $i < $total; $i++) { 
+        # code...
+        echo "<li class=snippet>";
+        
+        echo $results[$i]['_source']['name'];
+        
+        echo "</li>";
+      }
+      ?>
+
+      
+    </ul>
+    <ul class="pagination"></ul>
+  </div>
   
-  
-        <?php
-        if(isset($results)) {
-         $max = sizeof($results);
-         $pagesize =10;
-         $pagecount = $max/$pagesize;
-         echo "Maximum : ",$max,"\r\n";
-         echo "Pagesize : ",$pagesize,"\r\n";
-         echo "PageCount : ",$pagecount,"\r\n";
-
-            foreach($results as $key=>$r) {
-
-             if($key<$pagesize)
-             {
-
-             
-            ?>
-            
-              
-                <div class="row" style="text-align: center">
-           <div class="container initial">
-          <div class="panel panel-success">
-                      <div class0=panel-heading>
-                        <h2 class=panel-title>
-                          <a href="<?php echo $r['_source']['websites']; ?>" target="_blank"><p><br> 
-                            <?php echo $r['_source']['name']; ?>
-                          </a>
-                          
-                      </div>
-                        
-                          <b>Content:</b><p> 
-                                <?php echo $r['_source']['name'];
-                                echo nl2br("\r\n"); ?>
-
-                              <?php echo $r['_source']['address'] ;
-                                echo nl2br("\r\n");
-                              echo  $r['_source']['city'];
-                              echo nl2br("\r\n");
-                              echo  $r['_source']['country'];
-                               echo nl2br("\r\n");
-                               echo  $r['_source']['categories'];
-                               echo nl2br("\r\n");
-                               // echo  $r['_source']['websites'];
-                              ?><p></p>
-                      <div class="">
-                          <b>DocId:</b>
-                            
-                                <?php echo $r['_id']; ?>
-                    </div>
-                    <input method= "POST" id="<?php echo $r['_id']; ?>" type="submit" class="btn btn-success save" value="Save" style="
-    background-color: skyblue;">
-                     <br>
-
-               <br>
-                  </div>
-                  
-                </div>
-               
-                
-            <?php
-             }
-            } 
-            
-            ?>
-            </div>
-            <?php          
-            for($i=1;$i<$pagecount;$i++){
-            ?>
-
-               <a class="page-link searchresult" id="<?php echo $xq ?>" href="#" value=<?php echo $i?>><?php echo $i ?></a>
-            <?php       
-            }
-          
-
-          
-            ?>
-  
-
-               
-          
-           
-               
-               
-           
-          
-            <?php
-        }
-        ?>
 </body>
 </html>
