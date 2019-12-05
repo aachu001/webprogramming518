@@ -99,7 +99,14 @@
   <script type="text/javascript" src="pagination.js"></script>
 
 
-  
+ <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 400px;
+            width: 600px;
+        }
+    </style>
+
 
 </head>
 <script type="text/javascript">
@@ -111,6 +118,8 @@
   }, false);
 
 </script>
+    
+  
 <body>
 <div class="topnav">
 
@@ -178,6 +187,7 @@
          echo "PageCount : ",$pagecount,"\r\n";
 
             foreach($results as $key=>$r) {
+              $i=1;
 
              if($key<$pagesize)
              {
@@ -216,11 +226,23 @@
                             
                                 <?php echo $r['_id']; ?>
                     </div>
-                    <input method= "POST" id="<?php echo $r['_id']; ?>" type="submit" class="btn btn-success save" value="Save" style="
+                    <div id="showmap">
+                       <input id="<?php echo $r['_source']['id']; ?>" method="POST" type="submit" class="btn btn-success showmap" value="Map">
+                       
+                    </div>
+                    <div id="map"></div>
+
+                    
+    
+
+   
+
+                    <input method= "POST" id="<?php echo $r['_id']; ?>" type="submit" class="btn btn-success saves" value="Save" style="
     background-color: skyblue;">
                      <br>
 
-               <br>
+               <br>dd
+
                   </div>
                   
                 </div>
@@ -228,6 +250,8 @@
                 
             <?php
              }
+
+             $i++;
             } 
             
             ?>
@@ -248,12 +272,63 @@
                
           
            
-               
+                
                
            
           
             <?php
         }
         ?>
+    <!--     <script>
+        // Initialize and add the map
+
+
+        var map;
+        function haversine_distance(mk1, mk2) {
+            var R = 3958.8; // Radius of the Earth in miles
+            var rlat1 = mk1.position.lat() * (Math.PI / 180); // Convert degrees to radians
+            var rlat2 = mk2.position.lat() * (Math.PI / 180); // Convert degrees to radians
+            var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+            var difflon = (mk2.position.lng() - mk1.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
+
+            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+            return d;
+        }
+        function initMap() {
+            // The map, centered on Central Park
+            const center = { lat: 36.8954387, lng: -76.3058324 };
+            const options = { zoom: 10, scaleControl: true, center: center };
+            map = new google.maps.Map(
+                document.getElementById('map'), options);
+            // Locations of landmarks
+
+            const to = { lat: 36.7953409, lng: -76.2928175 };
+       
+
+            // The markers for The Dakota and The Frick Collection
+            var mk1 = new google.maps.Marker({ position: to, map: map });
+            var mk2 = new google.maps.Marker({ position: from, map: map });
+
+            var line = new google.maps.Polyline({ path: [to, from], map: map });
+            var distance = haversine_distance(mk1, mk2);
+            document.getElementById('msg').innerHTML = "Distance between markers: " + distance.toFixed(2) + " mi.";
+            var address = 'Norfolk';
+            var geo = new google.maps.Geocoder;
+            geo.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var myLatLng = results[0].geometry.location;
+
+                    var long = document.getElementById('msg2'), myLatLng;
+
+                } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
+    </script> -->
+    <!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9m50C60wtRqDNa4H3LI7Fmyiaq7NyXa4&callback=initMap">
+        </script>
 </body>
 </html>

@@ -1,3 +1,26 @@
+<?php 
+  session_start(); 
+
+  if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+    header('location: login.php');
+  }
+?>
+<?php 
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+    header('location: login.php');
+  }
+
+elseif (!$_SESSION['verified']){
+
+
+header('location: verify.php');
+
+}
+?>
 <?php    
   session_start();
   require_once 'app/init.php';
@@ -35,7 +58,10 @@
          $sql = "INSERT INTO saveitems (`user`, `id`, `name`, `categories`, `address`,`websites`) VALUES ('$username','$data', '$rest_name', '$rest_categories', '$rest_address','$rest_websites')";
         
          $result = mysqli_query($db, $sql);
-         echo "inserted";
+        echo "<script type='text/javascript'>alert('Addeed');</script>";
+
+        header('location: index1.php');
+      
 
       //echo '<pre>', $total = $query['hits']['total']['value'], '</pre>';
       // $variables['total'] = $total;

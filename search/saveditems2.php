@@ -50,6 +50,13 @@
       <script src="styles/js/result.js" type="text/javascript"></script>
       <script src="styles/js/pagination.js" type="text/javascript"></script>
       <script src="styles/js/hilitor.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="remove.js"></script>
 
 
   <style>
@@ -79,22 +86,25 @@
   
 
 <div class="row" style="text-align: center">
-        <div class="">
-          <div class="">
                       <div class="" style="background-color : aliceblue;">  
                        <p><a href="<?php echo $row['websites'] ?>"><br>
                             <?php echo $title;?></a>
                       </p></div>
-                        <br><br>
-                              <b>categories</b><p> 
-                              <?php echo $row['categories'];?></p><p></p><br>
-                              <b>Address</b><p> 
-                              <?php echo $row['address'];?></p><p></p><br>
-                              <b>Time</b><p> 
-                              <?php echo $row['time_stamp'];?></p><p></p><br>
+                              <b>categories:</b> 
+                              <?php echo $row['categories'];?><br>
+                              <b>Address:</b> 
+                              <?php echo $row['address'];?><br>
+                              <b>Time:</b> 
+                              <?php echo $row['time_stamp'];?><br>
+                              <input id="<?php echo $row['id']; ?>" method="POST" type="submit" class="btn btn-success removeitems" value="Remove">
                             <?php }}?>
-                <a class="btn btn-lg btn-primary btn-block" href="index1.php">Back</a>
-            </div>
-        </div>
+                            
+
+                            
+                            
+      </div>
+    <div class="input-group" style="background-color: turquoise; margin-left: 605px;">
+      <a class="btn btn-lg btn-primary btn-block" href="index1.php">Back</a>
     </div>
+    
 </body>

@@ -99,7 +99,13 @@ function highlightWords($text,$word) {
   <!-- <script type="text/javascript" src="hilitor.js"></script> -->
   <script type="text/javascript" src="save.js"></script>
 <!--   <script type="text/javascript" src="pagination.js"></script> -->
-
+<style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 400px;
+            width: 600px;
+        }
+    </style>
 
 
 
@@ -123,6 +129,27 @@ function highlightWords($text,$word) {
     var listObj = new List('listId',options);
   });
 </script>
+<script>
+var recognition = new webkitSpeechRecognition();
+recognition.onresult = function(event) { 
+  var saidText = "";
+  for (var i = event.resultIndex; i < event.results.length; i++) {
+    if (event.results[i].isFinal) {
+      saidText = event.results[i][0].transcript;
+    } else {
+      saidText += event.results[i][0].transcript;
+    }
+  }
+  // Update Textbox value
+  document.getElementById('speechText').value = saidText;
+ 
+  // Search Posts
+  searchPosts(saidText);
+}
+function startRecording(){
+  recognition.start();
+}
+</script>
 <body>
 
 
@@ -143,19 +170,24 @@ function highlightWords($text,$word) {
 <br>
 <br>
 <form action="display.php" method="get" autocomplete="on">
-<div class="" style="text-align: center">
-   <div class="">
-      <input type="text" class=""  name="q" placeholder="What are you looking for?">
-      <button type="submit" class=""> Go
-        <i class=""></i>
-     </button>
-   </div>
-   <a href="advance.php"><b>Advanced_Search</b></a>
-   <br>
-   <br>
-   <a href="index.php">BACK</a>
+  <div class='wrap1'>
+  <!-- Search box-->
+  <div class="search">
+  <input type='text' class='searchTerm' id='speechText' name='q'> 
+  <button type="submit" class="searchButton"> Go
+        <i class="fa fa-search"></i>
+     </button> &nbsp; 
+     
+  <input type='button' id='start' value='Start' onclick='startRecording();'>
 
 </div>
+<a href="advance.php"><b>Advanced_Search</b></a>
+   <br>
+   <br>
+    
+</div>
+<!-- Search Result -->
+<div class="container"></div>
 </form>
 
 <br>
@@ -190,12 +222,12 @@ function highlightWords($text,$word) {
         <div class="row" style="text-align: center">
           <div class="container">
             <div class="panel panel-success">
-                        <div class=panel-heading>
+                        <div class=panel-heading style="background-color: #9fe0e4;">
                           <h2 class=panel-title>
                            
-                            <a href="<?php echo $results[$i]['_source']['websites']; ?>" target="_blank"><p><br> 
+                            <a href="<?php echo $results[$i]['_source']['websites']; ?>" target="_blank"> 
                             <?php $name= !empty($xq)?highlightWords($results[$i]['_source']['name'],$xq):$results[$i]['_source']['name'];
-                                echo $name; ?><p></p><br>
+                                echo $name; ?>
                           </a>
                           <!-- <a href="<?php $address= !empty($xq)?highlightWords($results[$i]['_source']['address'],$xq):$results[$i]['_source']['address'];
                                 echo $address; ?>" target="_blank"><p><br> 
@@ -203,20 +235,76 @@ function highlightWords($text,$word) {
                                 echo $name; ?><p></p><br>
                           </a> -->
                         </div>
-                          <br><br>
-
-                            <b>address:</b><p>
+                            <b>address:</b>
                                 <?php $address= !empty($xq)?highlightWords($results[$i]['_source']['address'],$xq):$results[$i]['_source']['address'];
-                                echo $address; ?><p></p><br>
-                            <b>Categories:</b><p>
+                                echo $address; ?><br>
+                            <b>Categories:</b>
                                 <?php $Categories= !empty($xq)?highlightWords($results[$i]['_source']['primaryCategories'],$xq):$results[$i]['_source']['primaryCategories'];
-                                echo $Categories; ?><p></p><br>
-                            <b>Postalcode:</b><p>
+                                echo $Categories; ?><br>
+                            <b>Postalcode:</b>
                                 <?php $postalCode= !empty($xq)?highlightWords($results[$i]['_source']['postalCode'],$xq):$results[$i]['_source']['postalCode'];
-                                echo $postalCode; ?><p></p><br>
+                                echo $postalCode; ?>
                             <br>
-                            <!-- <input class="btn green save" method="POST" id=<?php echo $results[$i]['_id']; ?> name="Save" type="submit" value="Save"> -->
-                          <!-- <button type="button" class="btn btn-default" data-dismiss="modal"> -->
+<!--                             <div id="map"></div>
+    <div id="msg"></div>
+    <div id="msg2"></div>
+    <script>
+        // Initialize and add the map
+
+
+        var map;
+        function haversine_distance(mk1, mk2) {
+            var R = 3958.8; // Radius of the Earth in miles
+            var rlat1 = mk1.position.lat() * (Math.PI / 180); // Convert degrees to radians
+            var rlat2 = mk2.position.lat() * (Math.PI / 180); // Convert degrees to radians
+            var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+            var difflon = (mk2.position.lng() - mk1.position.lng()) * (Math.PI / 180); // Radian difference (longitudes)
+
+            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+            return d;
+        }
+        function initMap() {
+            // The map, centered on Central Park
+            const center = { lat: 36.8954387, lng: -76.3058324 };
+            const options = { zoom: 10, scaleControl: true, center: center };
+            map = new google.maps.Map(
+                document.getElementById('map'), options);
+            // Locations of landmarks
+
+            const to = { lat: 36.7953409, lng: -76.2928175 };
+            const from = { lat: 36.8954387, lng: -76.3058324 };
+
+            // The markers for The Dakota and The Frick Collection
+            var mk1 = new google.maps.Marker({ position: to, map: map });
+            var mk2 = new google.maps.Marker({ position: from, map: map });
+
+            var line = new google.maps.Polyline({ path: [to, from], map: map });
+            var distance = haversine_distance(mk1, mk2);
+            document.getElementById('msg').innerHTML = "Distance between markers: " + distance.toFixed(2) + " mi.";
+            var address = 'Norfolk';
+            var geo = new google.maps.Geocoder;
+            geo.geocode({ 'address': address }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var myLatLng = results[0].geometry.location;
+
+                    var long = document.getElementById('msg2'), myLatLng;
+
+                } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                }
+            });
+        }
+    </script>
+    <!--Load the API from the specified URL -- remember to replace YOUR_API_KEY-->
+    <!-- <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9m50C60wtRqDNa4H3LI7Fmyiaq7NyXa4&callback=initMap">
+        </script> --> 
+                            <form method="post" action="saves.php">
+                              <div class="input-group" style="text-align: center">
+                              <button type="submit" class="btn" name="" style="background-color: turquoise; margin-left: 545px;">Save</button>
+                              
+                            </div>
+                            </form>      
                     </div>
                   </div>
                 </div>

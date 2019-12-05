@@ -1,3 +1,26 @@
+<?php 
+  session_start(); 
+
+  if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+    header('location: login.php');
+  }
+?>
+<?php 
+if (!isset($_SESSION['username'])) {
+    $_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+    header('location: login.php');
+  }
+
+elseif (!$_SESSION['verified']){
+
+
+header('location: verify.php');
+
+}
+?>
 <?php
 
   require_once 'app/init.php';
@@ -90,9 +113,13 @@ function highlightWords($text,$word) {
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-  <!-- <script type="text/javascript" src="hilitor.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
   <script type="text/javascript" src="save.js"></script>
-<!--   <script type="text/javascript" src="pagination.js"></script> -->
 
 
 
@@ -135,23 +162,41 @@ function highlightWords($text,$word) {
 <br>
 <br>
 <form action="display1.php" method="get" autocomplete="on">
-<div class="" style="text-align: center">
+<!-- <div class="" style="text-align: center">
    <div class="" >
       <input type="text" class=""  name="q" placeholder="What are you looking for?">
       <button type="submit" class=""> Go
         <i class=""></i>
      </button>
    </div>
-   <a href="advance.php"><b>Advance_Search</b></a>
+   <a href="advance.php"><b>Advanced_Search</b></a>
    <br>
+   <a href="add.php">ADD</a>
    <br>
    <a href="index.php">BACK</a>
 
+</div> -->
+<div class="wrap1">
+  <?php  if (isset($_SESSION['username'])) : ?>
+      <p>Welcome <strong><?php echo $_SESSION['username']; ?> </strong></p>   
+  <?php endif ?>
+   <div class="search">
+      <input type="text" class="searchTerm"  id="speechText" name="q" placeholder="What are you looking for?">
+      <button type="submit" class="searchButton"> Go
+        <i class="fa fa-search"></i>
+     </button> &nbsp;
+     <input type='button' id='start' value='Start' onclick='startRecording();'>
+   </div>
+   <a href="advance.php"><b>Advanced_Search</b></a>&nbsp;
+   &nbsp;
+   <a href="add.php"><b>ADD</b></a>&nbsp;&nbsp;
+   
 </div>
 </form>
 
 <br>
-
+<br>
+<br>
 <br>
 
  <div class="" style="text-align: center">
@@ -182,24 +227,22 @@ function highlightWords($text,$word) {
         <div class="row" style="text-align: center">
           <div class="container">
             <div class="panel panel-success">
-                        <div class=panel-heading>
+                        <div class=panel-heading style="background-color: #9fe0e4;">
                           <h2 class=panel-title>
                            
-                            <a href="<?php echo $results[$i]['_source']['websites']; ?>" target="_blank"><p><br> 
+                            <a href="<?php echo $results[$i]['_source']['websites']; ?>" target="_blank">
                             <?php $name= !empty($xq)?highlightWords($results[$i]['_source']['name'],$xq):$results[$i]['_source']['name'];
-                                echo $name; ?><p></p><br>
+                                echo $name; ?><br>
                           </a>
                         </div>
-                          <br><br>
-                            <b>address:</b><p>
-                                <?php $address= !empty($xq)?highlightWords($results[$i]['_source']['address'],$xq):$results[$i]['_source']['address'];
-                                echo $address; ?><p></p><br>
-                            <b>Categories:</b><p>
+                            <b>address:</b>                                <?php $address= !empty($xq)?highlightWords($results[$i]['_source']['address'],$xq):$results[$i]['_source']['address'];
+                                echo $address; ?><br>
+                            <b>Categories:</b>
                                 <?php $Categories= !empty($xq)?highlightWords($results[$i]['_source']['primaryCategories'],$xq):$results[$i]['_source']['primaryCategories'];
-                                echo $Categories; ?><p></p><br>
-                            <b>Postalcode:</b><p>
+                                echo $Categories; ?><br>
+                            <b>Postalcode:</b>
                                 <?php $postalCode= !empty($xq)?highlightWords($results[$i]['_source']['postalCode'],$xq):$results[$i]['_source']['postalCode'];
-                                echo $postalCode; ?><p></p><br>
+                                echo $postalCode; ?>
                             <br>
                             <input id="<?php echo $results[$i]['_source']['id']; ?>" method="POST" type="submit" class="btn btn-success save" value="Save">
                           

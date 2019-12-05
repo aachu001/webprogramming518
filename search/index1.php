@@ -33,6 +33,27 @@ header('location: verify.php');
 	<title>Home</title>
 	
 </head>
+<script>
+var recognition = new webkitSpeechRecognition();
+recognition.onresult = function(event) { 
+  var saidText = "";
+  for (var i = event.resultIndex; i < event.results.length; i++) {
+    if (event.results[i].isFinal) {
+      saidText = event.results[i][0].transcript;
+    } else {
+      saidText += event.results[i][0].transcript;
+    }
+  }
+  // Update Textbox value
+  document.getElementById('speechText').value = saidText;
+ 
+  // Search Posts
+  searchPosts(saidText);
+}
+function startRecording(){
+  recognition.start();
+}
+</script>
 
 <body>
 
@@ -50,18 +71,19 @@ header('location: verify.php');
 <br>
 
 
-<form action="display1.php" method="get" autocomplete="off">
+<form action="display1.php" method="get" autocomplete="on">
 <div class="wrap">
   <?php  if (isset($_SESSION['username'])) : ?>
       <p>Welcome <strong><?php echo $_SESSION['username']; ?> </strong></p>   
   <?php endif ?>
    <div class="search">
-      <input type="text" class="searchTerm"  name="q" placeholder="What are you looking for?">
+      <input type="text" class="searchTerm"  id="speechText" name="q" placeholder="What are you looking for?">
       <button type="submit" class="searchButton"> Go
         <i class="fa fa-search"></i>
-     </button>
+     </button> &nbsp;
+     <input type='button' id='start' value='Start' onclick='startRecording();'>
    </div>
-   <a href="advance.php"><b>Advance_Search</b></a>
+   <a href="advance.php"><b>Advanced_Search</b></a>
    <br>
    <br>
    <a href="add.php">ADD</a>
