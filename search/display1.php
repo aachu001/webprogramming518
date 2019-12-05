@@ -2,9 +2,15 @@
   session_start(); 
 
   if (!isset($_SESSION['username'])) {
+<<<<<<< HEAD
     $_SESSION['msg'] = "You must log in first";
     echo $_SESSION['msg'];
     header('location: login.php');
+=======
+  	$_SESSION['msg'] = "You must log in first";
+    echo $_SESSION['msg'];
+  	header('location: login.php');
+>>>>>>> a5988675aa5fa0c2ccf3a8fbed6e26a8fbc3d810
   }
 ?>
 <?php 
